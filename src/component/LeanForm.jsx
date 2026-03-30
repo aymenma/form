@@ -1,10 +1,10 @@
 import "./FormStyle.css";
-import Model from "./Model";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import Model from "./Model.jsx";
 import MyComponent from "./MyComponent.jsx";
-import { inputContext } from "./context/loanFormContext.jsx";
-import { useContext } from "react";
-import { userContext } from "./context/userContext.jsx";
+//context
+import { inputContext } from "../context/loanFormContext.jsx";
+import { userContext } from "../context/userContext.jsx";
 export default function LeanForm() {
   const userData = useContext(userContext);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -16,15 +16,17 @@ export default function LeanForm() {
     isEmployee: true,
     salaryRange: "",
   });
-  function hundelPhoneChange(value) {
-    setLoanInput({ ...loanInput, phoneNumber: value });
-  }
   function hundelnameChange(value) {
     setLoanInput({ ...loanInput, name: value });
   }
+  function hundelPhoneChange(value) {
+    setLoanInput({ ...loanInput, phoneNumber: value });
+  }
+
   function hundelageChange(value) {
     setLoanInput({ ...loanInput, age: value });
   }
+
   function hundleFormSubmit(event) {
     event.preventDefault();
     setErrorMessage(null);
@@ -34,19 +36,15 @@ export default function LeanForm() {
     } else if (phoneNumber.length < 10 || phoneNumber.length > 12) {
       setErrorMessage("Phone Number is Incorrect");
     }
-
     setShowModel(true);
   }
-
-  const btnDisabled =
-    loanInput.name == "" || loanInput.phoneNumber == "" || loanInput.age == "";
   function hundelDevClick() {
     if (showModel) {
       setShowModel(false);
     }
   }
-
-  console.log(inputContext);
+  const btnDisabled =
+    loanInput.name == "" || loanInput.phoneNumber == "" || loanInput.age == "";
   return (
     <div
       className="flex"
@@ -63,6 +61,9 @@ export default function LeanForm() {
             handleChange: hundelnameChange,
           }}
         >
+           {/* using  usecontext too pass values from app to last child  
+           loanform =>MyComponent=>myinput 
+           */}
           <MyComponent />
         </inputContext.Provider>
 
@@ -84,27 +85,7 @@ export default function LeanForm() {
         >
           <MyComponent />
         </inputContext.Provider>
-        {/* <label>Name</label>
-        <input
-          value={loanInput.name}
-          onChange={(event) => {
-            setLoanInput({ ...loanInput, name: event.target.value });
-          }}
-        /> */}
-        {/*
-        <input
-          value={loanInput.phoneNumber}
-          onChange={(event) => {
-            setLoanInput({ ...loanInput, phoneNumber: event.target.value });
-          }}
-        /> */}
-        {/* <label>Age</label>
-        <input
-          value={loanInput.age}
-          onChange={(event) => {
-            setLoanInput({ ...loanInput, age: event.target.value });
-          }}
-        /> */}
+
         <label style={{ marginTop: "30px" }}>Are you an employee ?</label>
         <label type="checkbox"></label>
         <input
